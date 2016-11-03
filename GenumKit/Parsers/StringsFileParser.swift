@@ -41,8 +41,31 @@ public final class StringsFileParser {
         throw StringsFileParserError.InvalidFormat
     }
 
-    for case (let key, let translation) in dict {
+    var encoding: NSStringEncoding = NSUTF16StringEncoding
+    let fileContent = try NSString(contentsOfFile: path, usedEncoding: &encoding)
+
+    func extractKey(line: String) -> String? {
+      let regex: NSRegularExpression = {
+        do {
+          return try NSRegularExpression(pattern: "^\"([^\"]+)\"[ \t]*=", options: [])
+        } catch {
+          fatalError("Error while building Regular Expression for strings file parsing")
+        }
+      }()
+
+      let range = NSRange(location: 0, length: (line as NSString).length)
+      if let match = regex.firstMatchInString(line, options: [], range: range) {
+        return (line as NSString).substringWithRange(match.rangeAtIndex(1))
+      }
+      return nil
+    }
+
+    let lines = fileContent.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+
+    for case let key? in lines.map(extractKey) {
+      if let translation = dict[key] {
         addEntry(Entry(key: key, translation: translation))
+      }
     }
   }
 
