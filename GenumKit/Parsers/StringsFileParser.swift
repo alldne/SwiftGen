@@ -7,17 +7,17 @@
 import Foundation
 
 public enum StringsFileParserError: ErrorType, CustomStringConvertible {
-    case FailureOnLoading(path: String)
-    case InvalidFormat
+  case FailureOnLoading(path: String)
+  case InvalidFormat
 
-    public var description: String {
-        switch self {
-        case .FailureOnLoading(let path):
-            return "Failed to load a file at \"\(path)\""
-        case .InvalidFormat:
-            return "Invalid strings file"
-        }
+  public var description: String {
+    switch self {
+    case .FailureOnLoading(let path):
+      return "Failed to load a file at \"\(path)\""
+    case .InvalidFormat:
+      return "Invalid strings file"
     }
+  }
 }
 
 public final class StringsFileParser {
@@ -32,13 +32,13 @@ public final class StringsFileParser {
   // Localizable.strings files are generally UTF16, not UTF8!
   public func parseStringsFile(path: String) throws {
     guard let data = NSData(contentsOfFile: path) else {
-        throw StringsFileParserError.FailureOnLoading(path: path)
+      throw StringsFileParserError.FailureOnLoading(path: path)
     }
 
     let plist = try NSPropertyListSerialization.propertyListWithData(data, options: NSPropertyListReadOptions.Immutable, format: nil)
 
     guard let dict = plist as? Dictionary<String, String> else {
-        throw StringsFileParserError.InvalidFormat
+      throw StringsFileParserError.InvalidFormat
     }
 
     var encoding: NSStringEncoding = NSUTF16StringEncoding
@@ -126,8 +126,8 @@ public final class StringsFileParser {
     }
 
     public init(key: String, translation: String) {
-        let types = PlaceholderType.fromFormatString(translation)
-        self.init(key: key, translation: translation, types: types)
+      let types = PlaceholderType.fromFormatString(translation)
+      self.init(key: key, translation: translation, types: types)
     }
 
     private static let lineRegEx: NSRegularExpression = {

@@ -14,11 +14,11 @@ private func uppercaseFirst(string: String) -> String {
 }
 
 private extension String {
-    var newlineEscaped: String {
-        return self
-            .stringByReplacingOccurrencesOfString("\n", withString: "\\n")
-            .stringByReplacingOccurrencesOfString("\r", withString: "\\r")
-    }
+  var newlineEscaped: String {
+    return self
+      .stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+      .stringByReplacingOccurrencesOfString("\r", withString: "\\r")
+  }
 }
 
 /* MARK: - Stencil Context for Colors
